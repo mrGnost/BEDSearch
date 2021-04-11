@@ -2,19 +2,20 @@ import java.nio.file.Path
 import com.google.gson.*
 import java.nio.file.Files
 
-class BedIndexImpl(data: List<BedEntry>): BedIndex {
-    private var searchTree = BedTree(data.first())
+class BedIndexImpl(private var searchTree: BedTree): BedIndex {
 
-    init {
+    constructor(data: List<BedEntry>): this(BedTree(data.first())) {
         for (i in 1 until data.size)
             searchTree.insert(data[i])
         searchTree.injectArrays()
+        BedIndexImpl(searchTree)
     }
 
-    constructor(path: Path) {
-        val json = Files.readString(path)
-        searchTree = BedTree(Gson().fromJson(json, BedTreeNode::class.java))
-    }
+    /**
+     * Deserialization of BedTree root.
+     */
+    constructor(path: Path):
+            this(BedTree(Gson().fromJson(Files.readString(path), BedTreeNode::class.java)))
 
     override fun search(entry: BedEntry): List<BedEntry> = searchTree.find(entry)
 
