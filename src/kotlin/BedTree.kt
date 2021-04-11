@@ -135,7 +135,8 @@ class BedTree(var root: BedTreeNode) {
         roots.forEach { x ->
             val left = binarySearch(x.children, entry.start) { m, n -> m < n }
             val right = binarySearch(x.children, entry.end) { m, n -> m <= n } + 1
-            foundEntries.addAll(foundEntries.subList(left, right))
+            if (right > left)
+                foundEntries.addAll(foundEntries.subList(left, right))
         }
         return foundEntries
     }
