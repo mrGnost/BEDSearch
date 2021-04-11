@@ -7,7 +7,7 @@
  */
 class BedTree(var root: BedTreeNode) {
 
-    constructor(entry: BedEntry): this(BedTreeNode(entry))
+    constructor(entry: BedEntry) : this(BedTreeNode(entry))
 
     fun insert(entry: BedEntry) {
         root = insert(root, entry)
