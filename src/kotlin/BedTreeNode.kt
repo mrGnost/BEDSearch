@@ -6,7 +6,7 @@ data class BedTreeNode(
         var left: BedTreeNode? = null,
         var right: BedTreeNode? = null,
         var size: Int = 1,
-        var children: Array<BedEntry> = emptyArray()
+        var children: Array<BedEntry> = emptyArray<BedEntry>()
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

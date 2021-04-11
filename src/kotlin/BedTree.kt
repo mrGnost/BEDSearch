@@ -22,22 +22,32 @@ class BedTree(var root: BedTreeNode) {
         node ?: return emptyArray()
         val leftArray = if (node.left != null) injectArrays(node.left) else emptyArray()
         val rightArray = if (node.right != null) injectArrays(node.right) else emptyArray()
-        node.children = fillSortedArray(leftArray, rightArray)
+        node.children = fillSortedArray(leftArray, rightArray, node.data)
         return node.children
     }
 
-    private fun fillSortedArray(leftArray: Array<BedEntry>, rightArray: Array<BedEntry>): Array<BedEntry> {
-        val array = Array(leftArray.size + rightArray.size) { BedEntry() }
+    private fun fillSortedArray(
+            leftArray: Array<BedEntry>,
+            rightArray: Array<BedEntry>,
+            currentData: BedEntry
+    ): Array<BedEntry> {
+        val array = Array(leftArray.size + rightArray.size + 1) { BedEntry() }
         var leftInd = 0
         var rightInd = 0
-        while (leftInd < leftArray.size || rightInd < rightArray.size) {
-            if (leftInd < leftArray.size &&
+        var nodeValueInserted = 0
+        while (leftInd < leftArray.size || rightInd < rightArray.size || nodeValueInserted == 0) {
+            if (nodeValueInserted == 0 &&
+                    (leftInd >= leftArray.size || currentData.end < leftArray[leftInd].end) &&
+                    (rightInd >= rightArray.size || currentData.end < rightArray[rightInd].end)) {
+                array[leftInd + rightInd] = currentData
+                nodeValueInserted = 1
+            } else if (leftInd < leftArray.size &&
                     (rightInd >= rightArray.size ||
                             leftArray[leftInd].end < rightArray[rightInd].end)) {
-                array[leftInd + rightInd] = leftArray[leftInd]
+                array[leftInd + rightInd + nodeValueInserted] = leftArray[leftInd]
                 leftInd++
             } else {
-                array[leftInd + rightInd] = rightArray[rightInd]
+                array[leftInd + rightInd + nodeValueInserted] = rightArray[rightInd]
                 rightInd++
             }
         }
