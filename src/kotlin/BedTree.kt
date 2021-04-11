@@ -151,7 +151,7 @@ class BedTree(var root: BedTreeNode) {
         node ?: return BedTreeNode(entry)
         // Insert node into root with probability of 1/(number of nodes in tree).
         if ((0..(node.size + 1)).random() == 0)
-            return insertRoot(root, entry)
+            return insertRoot(node, entry)
         if (entry.start < node.data.start)
             node.left = insert(node.left, entry)
         else
@@ -175,6 +175,7 @@ class BedTree(var root: BedTreeNode) {
         left.right = node
         left.size = node.size
         fixSize(node)
+        fixSize(left)
         return left
     }
 
@@ -184,6 +185,7 @@ class BedTree(var root: BedTreeNode) {
         right.left = node
         right.size = node.size
         fixSize(node)
+        fixSize(right)
         return right
     }
 
