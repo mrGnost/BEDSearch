@@ -133,21 +133,21 @@ class BedTree(var root: BedTreeNode) {
     private fun filterSubtreesByEnd(roots: MutableList<BedTreeNode>, entry: BedEntry): MutableList<BedEntry> {
         val foundEntries = mutableListOf<BedEntry>()
         roots.forEach { x ->
-            val left = binarySearch(x.children, entry.start) { m, n -> m < n }
-            val right = binarySearch(x.children, entry.end) { m, n -> m <= n } + 1
-            if (right > left)
-                foundEntries.addAll(foundEntries.subList(left, right))
+            val right = binarySearch(x.children, entry.end)
+            println("$right $entry ${x.children.toList()}")
+            if (right > 0 && right <= x.children.size)
+                foundEntries.addAll(x.children.toList().subList(0, right))
         }
         return foundEntries
     }
 
-    private fun binarySearch(list: Array<BedEntry>, value: Int, condition: (y: Int, z: Int) -> Boolean): Int {
+    private fun binarySearch(list: Array<BedEntry>, value: Int): Int {
         var left = -1
         var right = list.size
         var middle: Int
         while (right > left + 1) {
             middle = left + (right - left) / 2
-            if (!condition(list[middle].end, value))
+            if (list[middle].end <= value)
                 left = middle
             else
                 right = middle
