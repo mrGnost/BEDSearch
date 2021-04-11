@@ -26,6 +26,9 @@ class BedTree(var root: BedTreeNode) {
         return node.children
     }
 
+    /**
+     * Algo that allow combine two sorted arrays and insert one value in process.
+     */
     private fun fillSortedArray(
             leftArray: Array<BedEntry>,
             rightArray: Array<BedEntry>,
@@ -36,6 +39,7 @@ class BedTree(var root: BedTreeNode) {
         var rightInd = 0
         var nodeValueInserted = 0
         while (leftInd < leftArray.size || rightInd < rightArray.size || nodeValueInserted == 0) {
+            // Insert value if its turn has come; else insert minimal value of ones from two sorted arrays.
             if (nodeValueInserted == 0 &&
                     (leftInd >= leftArray.size || currentData.end < leftArray[leftInd].end) &&
                     (rightInd >= rightArray.size || currentData.end < rightArray[rightInd].end)) {
